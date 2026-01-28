@@ -26,21 +26,23 @@
         .btn-add:hover { background: #c2185b; }
 
         /* Cart Sidebar */
-        #cart-sidebar { position: fixed; right: -400px; top: 0; width: 350px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); transition: 0.4s; z-index: 1001; padding: 20px; overflow-y: auto; }
+        #cart-sidebar { position: fixed; right: -400px; top: 0; width: 380px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); transition: 0.4s; z-index: 1001; padding: 20px; overflow-y: auto; }
         #cart-sidebar.active { right: 0; }
         .close-cart { cursor: pointer; float: right; font-size: 1.5rem; }
         .cart-item { display: flex; justify-content: space-between; margin: 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         
         .total-section { margin-top: 20px; font-weight: bold; font-size: 1.2rem; text-align: right; padding-top: 10px; border-top: 2px solid #eee; }
 
-        /* NEW: Payment Section Styles */
-        .payment-box { background: #fdf2f5; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #f8bbd0; }
-        .payment-box h3 { font-size: 1rem; margin-bottom: 10px; color: #333; }
-        .method { margin: 10px 0; display: flex; align-items: center; cursor: pointer; }
-        .method input { margin-right: 10px; accent-color: #e91e63; }
+        /* Address & Payment Sections */
+        .checkout-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #ddd; }
+        .checkout-box h3 { font-size: 1rem; margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         
-        #card-details { margin-top: 10px; display: none; }
-        #card-details input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        .option-label { display: block; margin: 8px 0; font-size: 0.9rem; cursor: pointer; }
+        .option-label input { margin-right: 8px; accent-color: #e91e63; }
+        
+        input[type="text"], input[type="password"], textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; }
+        
+        #card-details { display: none; margin-top: 10px; }
         
         footer { background: #333; color: white; text-align: center; padding: 20px; margin-top: 50px; }
 
@@ -75,29 +77,40 @@
             કુલ રકમ: ₹<span id="total-price">0</span>
         </div>
 
-        <div id="payment-area" style="display: none;">
-            <div class="payment-box">
-                <h3>પેમેન્ટની રીત પસંદ કરો:</h3>
-                
-                <label class="method">
-                    <input type="radio" name="payType" value="Cash" checked onclick="toggleCardFields(false)"> 
-                    રોકડ (Cash on Delivery)
+        <div id="checkout-form-area" style="display: none;">
+            <div class="checkout-box">
+                <h3>ડિલિવરી સરનામું (Address):</h3>
+                <label class="option-label">
+                    <input type="radio" name="addressType" value="Home" checked> ઘર (Home)
                 </label>
+                <label class="option-label">
+                    <input type="radio" name="addressType" value="Office"> ઓફિસ (Office)
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="addressType" value="Other"> અન્ય (Other)
+                </label>
+                <textarea id="full-address" rows="2" placeholder="તમારું પૂરું સરનામું અહીં લખો..."></textarea>
+            </div>
 
-                <label class="method">
-                    <input type="radio" name="payType" value="Card" onclick="toggleCardFields(true)"> 
-                    કાર્ડ (Debit/Credit Card)
+            <div class="checkout-box">
+                <h3>પેમેન્ટની રીત:</h3>
+                <label class="option-label">
+                    <input type="radio" name="payType" value="Cash" checked onclick="toggleCardFields(false)"> રોકડ (Cash)
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="payType" value="Card" onclick="toggleCardFields(true)"> કાર્ડ (Card)
                 </label>
 
                 <div id="card-details">
                     <input type="text" id="card-num" placeholder="16 અંકનો કાર્ડ નંબર" maxlength="16">
                     <div style="display: flex; gap: 5px;">
-                        <input type="text" placeholder="MM/YY" maxlength="5">
-                        <input type="password" placeholder="CVV" maxlength="3">
+                        <input type="text" placeholder="MM/YY" style="width: 50%;" maxlength="5">
+                        <input type="password" placeholder="CVV" style="width: 50%;" maxlength="3">
                     </div>
                 </div>
             </div>
-            <button class="btn-add" style="margin-top: 20px;" onclick="validateCheckout()">ઓર્ડર કન્ફર્મ કરો</button>
+
+            <button class="btn-add" style="margin-top: 20px;" onclick="processFinalOrder()">ઓર્ડર કન્ફર્મ કરો</button>
         </div>
     </div>
 
@@ -147,18 +160,18 @@
             const cartList = document.getElementById('cart-items-list');
             const cartCount = document.getElementById('cart-count');
             const totalPrice = document.getElementById('total-price');
-            const paymentArea = document.getElementById('payment-area');
+            const formArea = document.getElementById('checkout-form-area');
 
             cartCount.innerText = cart.length;
 
             if (cart.length === 0) {
                 cartList.innerHTML = '<p style="color: #999; margin-top: 20px;">તમારી કાર્ટ અત્યારે ખાલી છે.</p>';
                 totalPrice.innerText = 0;
-                paymentArea.style.display = "none";
+                formArea.style.display = "none";
                 return;
             }
 
-            paymentArea.style.display = "block";
+            formArea.style.display = "block";
             let total = 0;
             cartList.innerHTML = cart.map((item, index) => {
                 total += item.price;
@@ -179,29 +192,30 @@
             updateCart();
         }
 
-        function validateCheckout() {
+        function processFinalOrder() {
+            const address = document.getElementById('full-address').value;
+            const addrType = document.querySelector('input[name="addressType"]:checked').value;
             const payMethod = document.querySelector('input[name="payType"]:checked').value;
-            const totalAmount = document.getElementById('total-price').innerText;
+
+            if (!address.trim()) {
+                alert("કૃપા કરીને સરનામું લખો!");
+                return;
+            }
 
             if (payMethod === "Card") {
                 const cardNum = document.getElementById('card-num').value;
                 if (cardNum.length < 16) {
-                    alert("કૃપા કરીને સાચો 16 અંકનો કાર્ડ નંબર લખો!");
+                    alert("સાચો કાર્ડ નંબર લખો!");
                     return;
                 }
-                alert(`₹${totalAmount} કાર્ડ દ્વારા ચૂકવવામાં આવ્યા છે.`);
-            } else {
-                alert(`ઓર્ડર કન્ફર્મ! તમારે ડિલિવરી સમયે ₹${totalAmount} રોકડા આપવાના રહેશે.`);
             }
 
-            // Success Action
-            alert("તમારો ઓર્ડર સફળતાપૂર્વક લેવાઈ ગયો છે! KMart માં શોપિંગ કરવા બદલ આભાર.");
+            alert(`ઓર્ડર સફળ! \nસરનામું: ${addrType} - ${address} \nપેમેન્ટ: ${payMethod}`);
             cart = [];
             updateCart();
             toggleCart();
         }
 
-        // Initialize
         displayProducts();
     </script>
 </body>
