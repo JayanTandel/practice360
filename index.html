@@ -1,157 +1,152 @@
 <!DOCTYPE html>
-<html lang="gu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMart Shopping Mall | Online Store</title>
+    <title>KMart Shopping Mall | Professional Online Store</title>
     <style>
         /* CSS DESIGN */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
         
-        header { background: #e91e63; color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo { font-size: 1.8rem; font-weight: bold; }
-        .cart-icon { cursor: pointer; position: relative; font-size: 1.2rem; }
-        #cart-count { background: white; color: #e91e63; border-radius: 50%; padding: 2px 7px; font-size: 0.8rem; position: absolute; top: -10px; right: -15px; }
+        :root {
+            --primary-color: #e91e63;
+            --dark-color: #333;
+            --light-bg: #f4f4f4;
+        }
 
-        .banner { background: #f8f9fa; text-align: center; padding: 50px 20px; border-bottom: 2px solid #eee; }
-        .banner h1 { font-size: 2.5rem; color: #333; margin-bottom: 10px; }
+        header { 
+            background: var(--primary-color); 
+            color: white; 
+            padding: 1rem 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+        }
 
-        .product-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px 5%; }
-        .product-card { border: 1px solid #ddd; border-radius: 10px; padding: 15px; text-align: center; transition: 0.3s; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-        .product-card h3 { margin: 15px 0; font-size: 1.3rem; }
-        .price { color: #e91e63; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; }
-        .btn-add { background: #e91e63; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; }
+        .logo { font-size: 1.8rem; font-weight: bold; cursor: pointer; }
+        
+        .search-container { flex-grow: 0.5; margin: 0 20px; }
+        #searchInput { 
+            width: 100%; 
+            padding: 10px 15px; 
+            border-radius: 20px; 
+            border: none; 
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .cart-icon { cursor: pointer; position: relative; font-weight: 600; }
+        #cart-count { 
+            background: #ffeb3b; 
+            color: #333; 
+            border-radius: 50%; 
+            padding: 2px 8px; 
+            font-size: 0.8rem; 
+            position: absolute; 
+            top: -12px; 
+            right: -18px; 
+        }
+
+        .banner { 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1573855619003-97b4799dcd8b?w=1200');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center; 
+            padding: 100px 20px; 
+        }
+        .banner h1 { font-size: 3rem; margin-bottom: 10px; }
+        .banner p { font-size: 1.2rem; opacity: 0.9; }
+
+        .product-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 25px; 
+            padding: 40px 5%; 
+            background: var(--light-bg);
+        }
+
+        .product-card { 
+            background: white;
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center; 
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        .product-card h3 { margin: 15px 0 5px; font-size: 1.2rem; color: var(--dark-color); }
+        .category-tag { font-size: 0.8rem; color: #888; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .price { color: var(--primary-color); font-weight: bold; font-size: 1.3rem; margin-bottom: 15px; }
+        
+        .btn-add { 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: 600;
+            transition: 0.2s;
+        }
         .btn-add:hover { background: #c2185b; }
 
         /* Cart Sidebar */
-        #cart-sidebar { position: fixed; right: -400px; top: 0; width: 350px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); transition: 0.4s; z-index: 1001; padding: 20px; overflow-y: auto; }
+        #cart-sidebar { 
+            position: fixed; right: -400px; top: 0; width: 380px; height: 100%; 
+            background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1001; 
+            padding: 25px; display: flex; flex-direction: column;
+        }
         #cart-sidebar.active { right: 0; }
-        .close-cart { cursor: pointer; float: right; font-size: 1.5rem; }
-        .cart-item { display: flex; justify-content: space-between; margin: 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .total-section { margin-top: 20px; font-weight: bold; font-size: 1.2rem; text-align: right; }
+        .close-cart { cursor: pointer; font-size: 2rem; color: #888; align-self: flex-end; }
         
-        footer { background: #333; color: white; text-align: center; padding: 20px; margin-top: 50px; }
+        #cart-items-list { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
+        .cart-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; 
+        }
+        .cart-item-info { flex-grow: 1; margin-left: 10px; }
+        .cart-item-qty { font-size: 0.9rem; color: #666; }
 
-        @media (max-width: 600px) { #cart-sidebar { width: 100%; right: -100%; } }
+        .total-section { 
+            border-top: 2px solid #eee; padding-top: 20px;
+            font-weight: bold; font-size: 1.4rem; display: flex; justify-content: space-between;
+        }
+        
+        footer { background: var(--dark-color); color: white; text-align: center; padding: 40px; margin-top: 50px; }
+
+        @media (max-width: 600px) { 
+            #cart-sidebar { width: 100%; right: -100%; } 
+            .search-container { display: none; }
+            .banner h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">KMart 🛒</div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for products (e.g. Watch)..." oninput="filterProducts()">
+        </div>
         <div class="cart-icon" onclick="toggleCart()">
-            મારી કાર્ટ <span id="cart-count">0</span>
+            My Cart <span id="cart-count">0</span>
         </div>
     </header>
 
     <div class="banner">
-        <h1>KMart શોપિંગ મોલ માં તમારું સ્વાગત છે!</h1>
-        <p>તમારા મનપસંદ કપડાં અને ઈલેક્ટ્રોનિક્સ પર ભારે ડિસ્કાઉન્ટ મેળવો.</p>
+        <h1>Welcome to KMart Shopping Mall</h1>
+        <p>Premium Quality & Guaranteed Best Prices on Every Purchase.</p>
     </div>
 
     <div class="product-container" id="products">
         </div>
 
     <div id="cart-sidebar">
-        <span class="close-cart" onclick="toggleCart()">&times;</span>
-        <h2>તમારી કાર્ટ</h2>
-        <div id="cart-items-list">
-            <p style="color: #999; margin-top: 20px;">તમારી કાર્ટ અત્યારે ખાલી છે.</p>
-        </div>
-        <div class="total-section">
-            કુલ રકમ: ₹<span id="total-price">0</span>
-        </div>
-        <button class="btn-add" style="margin-top: 20px;" onclick="checkout()">ઓર્ડર કરો</button>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 KMart Shopping Mall - Computer Engineering Project</p>
-    </footer>
-
-    <script>
-        // JAVASCRIPT LOGIC
-        const products = [
-            { id: 1, name: "Smart Watch", price: 1999, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
-            { id: 2, name: "Headphones", price: 1499, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
-            { id: 3, name: "T-Shirt", price: 599, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500" },
-            { id: 4, name: "Laptop Bag", price: 899, img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" },
-            { id: 5, name: "Sneakers", price: 2499, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
-            { id: 6, name: "Sunglasses", price: 1299, img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" }
-        ];
-
-        let cart = [];
-
-        // Load Products
-        function displayProducts() {
-            const productDiv = document.getElementById('products');
-            productDiv.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3>${p.name}</h3>
-                    <p class="price">₹${p.price}</p>
-                    <button class="btn-add" onclick="addToCart(${p.id})">કાર્ટમાં ઉમેરો</button>
-                </div>
-            `).join('');
-        }
-
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('active');
-        }
-
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            updateCart();
-        }
-
-        function updateCart() {
-            const cartList = document.getElementById('cart-items-list');
-            const cartCount = document.getElementById('cart-count');
-            const totalPrice = document.getElementById('total-price');
-
-            cartCount.innerText = cart.length;
-
-            if (cart.length === 0) {
-                cartList.innerHTML = '<p style="color: #999; margin-top: 20px;">તમારી કાર્ટ અત્યારે ખાલી છે.</p>';
-                totalPrice.innerText = 0;
-                return;
-            }
-
-            let total = 0;
-            cartList.innerHTML = cart.map((item, index) => {
-                total += item.price;
-                return `
-                    <div class="cart-item">
-                        <span>${item.name}</span>
-                        <span>₹${item.price}</span>
-                        <button onclick="removeItem(${index})" style="background:none; border:none; color:red; cursor:pointer;">X</button>
-                    </div>
-                `;
-            }).join('');
-            
-            totalPrice.innerText = total;
-        }
-
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        function checkout() {
-            if(cart.length === 0) {
-                alert("કૃપા કરીને પહેલા વસ્તુઓ પસંદ કરો!");
-            } else {
-                alert("તમારો ઓર્ડર સફળતાપૂર્વક લેવાઈ ગયો છે! KMart માં શોપિંગ કરવા બદલ આભાર.");
-                cart = [];
-                updateCart();
-                toggleCart();
-            }
-        }
-
-        // Initialize
-        displayProducts();
-    </script>
-</body>
-</html>
