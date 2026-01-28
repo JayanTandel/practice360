@@ -3,280 +3,335 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMart Shopping Mall | Professional Store</title>
+    <title>KMart | AI Personalized Shopping Mall</title>
     <style>
         /* CSS DESIGN */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; scroll-behavior: smooth; }
         
         :root {
             --primary-color: #e91e63;
             --dark-color: #333;
             --light-bg: #f4f4f4;
+            --success-color: #2e7d32;
         }
 
         header { 
             background: var(--primary-color); 
             color: white; 
-            padding: 1rem 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
             position: sticky; 
             top: 0; 
             z-index: 1000; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
         }
 
-        .logo { font-size: 1.8rem; font-weight: bold; cursor: pointer; }
+        /* ROW 1: Logo, Search, and LOGIN */
+        .header-top {
+            padding: 12px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .logo { font-size: 1.8rem; font-weight: bold; cursor: pointer; white-space: nowrap; }
         
-        .search-container { flex-grow: 0.5; margin: 0 20px; }
+        .search-container { flex-grow: 1; max-width: 600px; }
         #searchInput { 
             width: 100%; 
-            padding: 8px 15px; 
-            border-radius: 20px; 
+            padding: 10px 15px; 
+            border-radius: 4px; 
             border: none; 
             outline: none;
+            font-size: 0.95rem;
         }
 
-        .cart-icon { cursor: pointer; position: relative; font-weight: 600; }
-        #cart-count { 
-            background: #ffeb3b; 
-            color: #333; 
-            border-radius: 50%; 
-            padding: 2px 8px; 
-            font-size: 0.8rem; 
-            position: absolute; 
-            top: -12px; 
-            right: -18px; 
+        .login-section { display: flex; align-items: center; cursor: pointer; transition: 0.2s; }
+        .login-section:hover { opacity: 0.8; }
+
+        /* ROW 2: Navigation Links and CART */
+        .header-bottom {
+            padding: 8px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #d81b60; 
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; font-size: 0.95rem; cursor: pointer; }
+        .nav-links a:hover { text-decoration: underline; }
+
+        .cart-section { cursor: pointer; position: relative; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        #cart-count { 
+            background: #ffeb3b; color: #333; border-radius: 50%; 
+            padding: 2px 6px; font-size: 0.7rem; position: absolute; 
+            top: -10px; right: -10px; font-weight: bold;
+        }
+
+        /* MAIN LAYOUT */
+        .main-container { display: flex; padding: 20px 5%; gap: 20px; background: var(--light-bg); }
+        .content-area { flex: 3; }
+        .ads-sidebar { flex: 1; background: white; padding: 15px; border-radius: 8px; height: fit-content; position: sticky; top: 120px; border: 1px solid #ddd; }
 
         .banner { 
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1573855619003-97b4799dcd8b?w=1200');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center; 
-            padding: 80px 20px; 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200');
+            background-size: cover; background-position: center; color: white;
+            text-align: center; padding: 60px 20px; border-radius: 8px; margin-bottom: 20px;
         }
 
-        .product-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 25px; 
-            padding: 40px 5%; 
-            background: var(--light-bg);
-        }
-
-        .product-card { 
-            background: white;
-            border-radius: 12px; 
-            padding: 15px; 
-            text-align: center; 
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-        .product-card h3 { margin: 15px 0 5px; font-size: 1.2rem; color: var(--dark-color); }
-        .category-tag { font-size: 0.8rem; color: #888; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .price { color: var(--primary-color); font-weight: bold; font-size: 1.3rem; margin-bottom: 15px; }
+        .section-title { margin: 20px 0 10px; font-size: 1.5rem; color: var(--dark-color); border-left: 5px solid var(--primary-color); padding-left: 10px; }
         
-        .btn-add { 
-            background: var(--primary-color); 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .btn-add:hover { background: #c2185b; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .product-card { background: white; border-radius: 12px; padding: 15px; text-align: center; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
+        .price { color: var(--primary-color); font-weight: bold; font-size: 1.2rem; margin: 10px 0; }
+        
+        .btn-add { background: var(--primary-color); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600; }
 
-        /* Cart Sidebar */
-        #cart-sidebar { 
-            position: fixed; right: -400px; top: 0; width: 380px; height: 100%; 
-            background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1001; 
-            padding: 25px; display: flex; flex-direction: column;
-        }
+        /* ADS STYLE */
+        .ad-item { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; text-align: center; }
+        .ad-item img { width: 100%; border-radius: 5px; margin-bottom: 8px; }
+        .ad-label { font-size: 0.65rem; background: #eee; color: #666; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-bottom: 5px; }
+
+        /* SIDEBAR CART & UPDATED CARD SECTION */
+        #cart-sidebar { position: fixed; right: -400px; top: 0; width: 380px; height: 100%; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: 0.4s; z-index: 1001; padding: 20px; display: flex; flex-direction: column; overflow-y: auto; color: #333; }
         #cart-sidebar.active { right: 0; }
-        .close-cart { cursor: pointer; font-size: 2rem; color: #888; align-self: flex-end; }
-        
-        #cart-items-list { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
-        .cart-item { 
-            display: flex; align-items: center; justify-content: space-between; 
-            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; 
-        }
-        .cart-item-info { flex-grow: 1; margin-left: 10px; }
-        .cart-item-qty { font-size: 0.9rem; color: #666; }
+        .close-cart { cursor: pointer; font-size: 2rem; align-self: flex-end; color: #888; }
 
-        .total-section { 
-            border-top: 2px solid #eee; padding-top: 20px;
-            font-weight: bold; font-size: 1.4rem; display: flex; justify-content: space-between;
-        }
+        .checkout-box { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-top: 12px; border: 1px solid #ddd; }
+        textarea, .card-input { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; }
         
-        footer { background: var(--dark-color); color: white; text-align: center; padding: 30px; margin-top: 50px; }
+        /* Inline Card layout for Expiry and CVV */
+        .card-row { display: flex; gap: 10px; margin-top: 8px; }
+        .card-row input { flex: 1; }
 
-        @media (max-width: 600px) { 
-            #cart-sidebar { width: 100%; right: -100%; } 
-            .search-container { display: none; }
-        }
+        #login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 320px; text-align: center; color: #333; }
+
+        footer { background: var(--dark-color); color: white; text-align: center; padding: 30px; }
+
+        @media (max-width: 900px) { .ads-sidebar { display: none; } #cart-sidebar { width: 100%; right: -100%; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">KMart 🛒</div>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Find an item (e.g. Watch).." oninput="filterProducts()">
+        <div class="header-top">
+            <div class="logo" onclick="location.reload()">KMart 🛒</div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
+            </div>
+            <div class="login-section" onclick="toggleModal(true)">
+                <span style="font-size: 1.4rem; margin-right: 5px;">👤</span>
+                <span style="font-size: 0.9rem; font-weight: 500;">Login</span>
+            </div>
         </div>
-        <div class="cart-icon" onclick="toggleCart()">
-            My cart <span id="cart-count">0</span>
+
+        <div class="header-bottom">
+            <nav class="nav-links">
+                <a onclick="window.scrollTo(0,0)">Home</a>
+                <a href="#all-products-title">Products</a>
+            </nav>
+            <div class="cart-section" onclick="toggleCart()">
+                <span style="font-size: 1.3rem;">🛒</span>
+                <span style="font-size: 0.9rem;">My Cart</span>
+                <span id="cart-count">0</span>
+            </div>
         </div>
     </header>
 
-    <div class="banner">
-        <h1>Welcome to KMart Shopping Mall!</h1>
-        <p>Get huge discounts on your favorite clothes and electronics.</p>
+    <div id="login-modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <input type="text" placeholder="Email" class="card-input">
+            <input type="password" placeholder="Password" class="card-input">
+            <button class="btn-add" style="margin-top:15px;" onclick="toggleModal(false)">Sign In</button>
+            <p onclick="toggleModal(false)" style="margin-top:15px; cursor:pointer; color:red; font-size:0.8rem;">Cancel</p>
+        </div>
     </div>
 
-    <div class="product-container" id="products">
+    <div class="main-container">
+        <div class="content-area">
+            <div class="banner">
+                <h1>AI-Powered Shopping</h1>
+                <p>Smart Recommendations Based on Your Interests</p>
+            </div>
+
+            <div id="personalized-section" style="display: none;">
+                <h2 class="section-title">Recommended for You</h2>
+                <div class="product-grid" id="recommended-products"></div>
+            </div>
+
+            <h2 class="section-title" id="all-products-title">Explore Store</h2>
+            <div class="product-grid" id="products"></div>
         </div>
+
+        <aside class="ads-sidebar">
+            <h3 style="color:#333; margin-bottom:15px; font-size:1.1rem;">Suggested for You</h3>
+            <div id="ads-container"></div>
+        </aside>
+    </div>
 
     <div id="cart-sidebar">
         <span class="close-cart" onclick="toggleCart()">&times;</span>
-        <h2>Your cart</h2>
-        <div id="cart-items-list">
-            <p style="color: #999; margin-top: 20px;">Your cart is currently empty.</p>
+        <h2>Your Cart</h2>
+        <div id="cart-items-list" style="margin-top:20px;">
+            <p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty</p>
         </div>
-        <div class="total-section">
-            Total amount: ₹<span id="total-price">0</span>
+
+        <div id="checkout-section" style="display: none;">
+            <div style="border-top:2px solid #eee; padding-top:15px; margin-top:15px;">
+                <p style="font-size:1.2rem; font-weight:bold; display:flex; justify-content:space-between;">
+                    Total: <span>₹<span id="total-price">0</span></span>
+                </p>
+            </div>
+            
+            <div class="checkout-box">
+                <h3 style="font-size:0.9rem;">Delivery Address</h3>
+                <textarea id="address" rows="2" placeholder="Full Address, Landmark, Pincode..."></textarea>
+            </div>
+
+            <div class="checkout-box">
+                <h3 style="font-size:0.9rem;">Payment Method</h3>
+                <label><input type="radio" name="pay" value="COD" checked onclick="toggleCard(false)"> Cash</label>
+                <label style="margin-left:15px;"><input type="radio" name="pay" value="Card" onclick="toggleCard(true)"> Card</label>
+                
+                <div id="card-fields" style="display:none; margin-top:10px;">
+                    <input type="text" id="card-no" class="card-input" placeholder="16-Digit Card Number" maxlength="16">
+                    <div class="card-row">
+                        <input type="text" id="card-expiry" class="card-input" placeholder="MM/YY" maxlength="5">
+                        <input type="password" id="card-cvv" class="card-input" placeholder="CVV" maxlength="3">
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn-add" style="margin-top:15px; background:var(--success-color); height: 45px;" onclick="placeOrder()">Place Order</button>
         </div>
-        <button class="btn-add" style="margin-top: 20px; background: #2e7d32;" onclick="checkout()">Confirm order</button>
     </div>
 
     <footer>
-        <p>&copy; 2026 KMart Shopping Mall - Computer Engineering Final Project</p>
-        <small>Developed with ❤️ for Modern Retail Experience</small>
+        <p>&copy; 2026 KMart Smart Retail System - Final Year Project</p>
     </footer>
 
     <script>
-        // Data with Categories
-        const products = [
-            { id: 1, name: "Smart Watch", category: "Electronics", price: 1999, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
-            { id: 2, name: "Headphones", category: "Electronics", price: 1499, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
-            { id: 3, name: "Premium T-Shirt", category: "Fashion", price: 599, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500" },
-            { id: 4, name: "Laptop Bag", category: "Accessories", price: 899, img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" },
-            { id: 5, name: "Sports Sneakers", category: "Footwear", price: 2499, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
-            { id: 6, name: "Sunglasses", category: "Accessories", price: 1299, img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" }
+        const allProducts = [
+            { id: 1, name: "Smart Watch", cat: "Electronics", price: 1999, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" },
+            { id: 2, name: "Headphones", cat: "Electronics", price: 1499, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
+            { id: 3, name: "Cotton T-Shirt", cat: "Fashion", price: 599, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" },
+            { id: 4, name: "Gaming Mouse", cat: "Electronics", price: 899, img: "https://images.unsplash.com/photo-1527814732934-7065992985f4?w=400" },
+            { id: 5, name: "Running Shoes", cat: "Fashion", price: 2499, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
+            { id: 6, name: "Leather Wallet", cat: "Fashion", price: 799, img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400" }
         ];
 
-        // Load cart from LocalStorage on startup
-        let cart = JSON.parse(localStorage.getItem('kmart_cart')) || [];
+        let cart = [];
+        let userInterests = JSON.parse(localStorage.getItem('kmart_interests')) || {};
 
-        function displayProducts(filteredProducts = products) {
-            const productDiv = document.getElementById('products');
-            if(filteredProducts.length === 0) {
-                productDiv.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 50px;">No items found..</p>`;
-                return;
-            }
-            productDiv.innerHTML = filteredProducts.map(p => `
+        function renderUI() {
+            const sorted = [...allProducts].sort((a, b) => (userInterests[b.cat] || 0) - (userInterests[a.cat] || 0));
+            document.getElementById('products').innerHTML = sorted.map(p => `
                 <div class="product-card">
-                    <span class="category-tag">${p.category}</span>
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3>${p.name}</h3>
+                    <img src="${p.img}">
+                    <h4 style="margin-top:10px;">${p.name}</h4>
                     <p class="price">₹${p.price}</p>
-                    <button class="btn-add" onclick="addToCart(${p.id})">Add to cart</button>
+                    <button class="btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
+                </div>
+            `).join('');
+            updateRecommendations();
+            updateAds();
+        }
+
+        function updateRecommendations() {
+            const topCat = Object.keys(userInterests).reduce((a, b) => userInterests[a] > userInterests[b] ? a : b, null);
+            const section = document.getElementById('personalized-section');
+            if(topCat && userInterests[topCat] > 0) {
+                section.style.display = 'block';
+                const recs = allProducts.filter(p => p.cat === topCat).slice(0, 3);
+                document.getElementById('recommended-products').innerHTML = recs.map(p => `
+                    <div class="product-card" style="border: 2px solid #ffeb3b">
+                        <img src="${p.img}">
+                        <h4>${p.name}</h4>
+                        <button class="btn-add" onclick="addToCart(${p.id})">Quick View</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateAds() {
+            const ads = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 2);
+            document.getElementById('ads-container').innerHTML = ads.map(ad => `
+                <div class="ad-item">
+                    <span class="ad-label">SPONSORED</span>
+                    <img src="${ad.img}">
+                    <p style="font-size:0.8rem; font-weight:600;">Offer on ${ad.name}</p>
+                    <button class="btn-add" style="font-size:0.7rem; padding:5px; margin-top:5px;" onclick="addToCart(${ad.id})">Shop Now</button>
                 </div>
             `).join('');
         }
 
-        function filterProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(searchTerm) || 
-                p.category.toLowerCase().includes(searchTerm)
-            );
-            displayProducts(filtered);
-        }
-
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('active');
-        }
-
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            const existingItem = cart.find(item => item.id === id);
-
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            
-            saveAndUpdate();
-        }
-
-        function removeItem(id) {
-            cart = cart.filter(item => item.id !== id);
-            saveAndUpdate();
-        }
-
-        function saveAndUpdate() {
-            localStorage.setItem('kmart_cart', JSON.stringify(cart));
+            const product = allProducts.find(p => p.id === id);
+            cart.push(product);
+            userInterests[product.cat] = (userInterests[product.cat] || 0) + 1;
+            localStorage.setItem('kmart_interests', JSON.stringify(userInterests));
             updateCartUI();
+            renderUI();
         }
 
         function updateCartUI() {
-            const cartList = document.getElementById('cart-items-list');
-            const cartCount = document.getElementById('cart-count');
-            const totalPrice = document.getElementById('total-price');
-
-            // Total Count of Items
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.innerText = totalItems;
-
-            if (cart.length === 0) {
-                cartList.innerHTML = '<p style="color: #999; margin-top: 20px; text-align:center;">Your cart is empty..</p>';
-                totalPrice.innerText = 0;
+            document.getElementById('cart-count').innerText = cart.length;
+            const list = document.getElementById('cart-items-list');
+            const checkout = document.getElementById('checkout-section');
+            if(cart.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty</p>';
+                checkout.style.display = "none";
                 return;
             }
-
-            let totalMoney = 0;
-            cartList.innerHTML = cart.map((item) => {
-                const itemTotal = item.price * item.quantity;
-                totalMoney += itemTotal;
-                return `
-                    <div class="cart-item">
-                        <img src="${item.img}" style="width: 50px; height: 50px; border-radius: 5px; object-fit: cover;">
-                        <div class="cart-item-info">
-                            <div style="font-weight:600;">${item.name}</div>
-                            <div class="cart-item-qty">${item.quantity} x ₹${item.price}</div>
-                        </div>
-                        <div style="font-weight:bold; margin-right: 10px;">₹${itemTotal}</div>
-                        <button onclick="removeItem(${item.id})" style="background:none; border:none; color:#ff5252; cursor:pointer; font-weight:bold;">✕</button>
-                    </div>
-                `;
+            checkout.style.display = "block";
+            let total = 0;
+            list.innerHTML = cart.map(item => {
+                total += item.price;
+                return `<div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span>${item.name}</span><b>₹${item.price}</b>
+                </div>`;
             }).join('');
-            
-            totalPrice.innerText = totalMoney.toLocaleString('en-IN');
+            document.getElementById('total-price').innerText = total.toLocaleString();
         }
 
-        function checkout() {
-            if(cart.length === 0) {
-                alert("Please select items first !");
-            } else {
-                alert("Your order has been successfully placed! Thank you for shopping at KMart.");
-                cart = [];
-                saveAndUpdate();
-                toggleCart();
+        function filterProducts() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q));
+            document.getElementById('products').innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}">
+                    <h4>${p.name}</h4>
+                    <p class="price">₹${p.price}</p>
+                    <button class="btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
+        function toggleModal(s) { document.getElementById('login-modal').style.display = s ? 'flex' : 'none'; }
+        function toggleCard(s) { document.getElementById('card-fields').style.display = s ? 'block' : 'none'; }
+        
+        function placeOrder() {
+            const addr = document.getElementById('address').value;
+            if(!addr.trim()) return alert("Please enter delivery address");
+
+            const payMethod = document.querySelector('input[name="pay"]:checked').value;
+            if(payMethod === "Card") {
+                const cardNo = document.getElementById('card-no').value;
+                const expiry = document.getElementById('card-expiry').value;
+                const cvv = document.getElementById('card-cvv').value;
+                if(cardNo.length < 16 || !expiry || cvv.length < 3) {
+                    return alert("Please enter full card details (16-digit card, Expiry, and CVV)");
+                }
             }
+
+            alert("Order Placed Successfully! Your items will reach you soon.");
+            cart = []; updateCartUI(); toggleCart();
         }
 
-        // Initialize
-        displayProducts();
+        renderUI();
         updateCartUI();
     </script>
 </body>
