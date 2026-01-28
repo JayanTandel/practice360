@@ -47,8 +47,8 @@
     </header>
 
     <div class="banner">
-        <h1>KMart શોપિંગ મોલ માં તમારું સ્વાગત છે!</h1>
-        <p>તમારા મનપસંદ કપડાં અને ઈલેક્ટ્રોનિક્સ પર ભારે ડિસ્કાઉન્ટ મેળવો.</p>
+        <h1>Welcome to KMart Shopping Mall!</h1>
+        <p>Get huge discounts on your favorite clothes and electronics.</p>
     </div>
 
     <div class="product-container" id="products">
@@ -56,12 +56,12 @@
 
     <div id="cart-sidebar">
         <span class="close-cart" onclick="toggleCart()">&times;</span>
-        <h2>તમારી કાર્ટ</h2>
+        <h2>Your cart</h2>
         <div id="cart-items-list">
-            <p style="color: #999; margin-top: 20px;">તમારી કાર્ટ અત્યારે ખાલી છે.</p>
+            <p style="color: #999; margin-top: 20px;">Your cart is currently empty.</p>
         </div>
         <div class="total-section">
-            કુલ રકમ: ₹<span id="total-price">0</span>
+            Total amount: ₹<span id="total-price">0</span>
         </div>
         <button class="btn-add" style="margin-top: 20px;" onclick="checkout()">ઓર્ડર કરો</button>
     </div>
@@ -91,7 +91,7 @@
                     <img src="${p.img}" alt="${p.name}">
                     <h3>${p.name}</h3>
                     <p class="price">₹${p.price}</p>
-                    <button class="btn-add" onclick="addToCart(${p.id})">કાર્ટમાં ઉમેરો</button>
+                    <button class="btn-add" onclick="addToCart(${p.id})">Add to cart</button>
                 </div>
             `).join('');
         }
@@ -114,7 +114,7 @@
             cartCount.innerText = cart.length;
 
             if (cart.length === 0) {
-                cartList.innerHTML = '<p style="color: #999; margin-top: 20px;">તમારી કાર્ટ અત્યારે ખાલી છે.</p>';
+                cartList.innerHTML = '<p style="color: #999; margin-top: 20px;">Your cart is currently empty..</p>';
                 totalPrice.innerText = 0;
                 return;
             }
@@ -141,9 +141,9 @@
 
         function checkout() {
             if(cart.length === 0) {
-                alert("કૃપા કરીને પહેલા વસ્તુઓ પસંદ કરો!");
+                alert("Please select items first !");
             } else {
-                alert("તમારો ઓર્ડર સફળતાપૂર્વક લેવાઈ ગયો છે! KMart માં શોપિંગ કરવા બદલ આભાર.");
+                alert("Your order has been successfully placed! Thank you for shopping at KMart.");
                 cart = [];
                 updateCart();
                 toggleCart();
