@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMart Shopping Mall | Professional Store</title>
+    <title>KMart | AI Personalized Shopping Mall</title>
     <style>
         /* CSS DESIGN */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; scroll-behavior: smooth; }
@@ -67,50 +67,56 @@
             top: -10px; right: -10px; font-weight: bold;
         }
 
-        /* CONTENT SECTIONS */
+        /* MAIN LAYOUT */
+        .main-container { display: flex; padding: 20px 5%; gap: 20px; background: var(--light-bg); }
+        .content-area { flex: 3; }
+        .ads-sidebar { flex: 1; background: white; padding: 15px; border-radius: 8px; height: fit-content; position: sticky; top: 120px; border: 1px solid #ddd; }
+
         .banner { 
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1573855619003-97b4799dcd8b?w=1200');
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200');
             background-size: cover; background-position: center; color: white;
-            text-align: center; padding: 80px 20px; 
+            text-align: center; padding: 60px 20px; border-radius: 8px; margin-bottom: 20px;
         }
 
-        .section-title { text-align: center; padding: 40px 0 10px; background: var(--light-bg); font-size: 1.8rem; }
-        .product-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; padding: 30px 5%; background: var(--light-bg); }
-
+        .section-title { margin: 20px 0 10px; font-size: 1.5rem; color: var(--dark-color); border-left: 5px solid var(--primary-color); padding-left: 10px; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
         .product-card { background: white; border-radius: 12px; padding: 15px; text-align: center; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-        .price { color: var(--primary-color); font-weight: bold; font-size: 1.3rem; margin: 10px 0; }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
+        .price { color: var(--primary-color); font-weight: bold; font-size: 1.2rem; margin: 10px 0; }
         
         .btn-add { background: var(--primary-color); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600; }
 
-        /* CART SIDEBAR & CHECKOUT */
-        #cart-sidebar { position: fixed; right: -400px; top: 0; width: 380px; height: 100%; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: 0.4s; z-index: 1001; padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
+        /* ADS STYLE */
+        .ad-item { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; text-align: center; }
+        .ad-item img { width: 100%; border-radius: 5px; margin-bottom: 8px; }
+        .ad-label { font-size: 0.65rem; background: #eee; color: #666; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-bottom: 5px; }
+
+        /* SIDEBAR CART & UPDATED CARD SECTION */
+        #cart-sidebar { position: fixed; right: -400px; top: 0; width: 380px; height: 100%; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: 0.4s; z-index: 1001; padding: 20px; display: flex; flex-direction: column; overflow-y: auto; color: #333; }
         #cart-sidebar.active { right: 0; }
         .close-cart { cursor: pointer; font-size: 2rem; align-self: flex-end; color: #888; }
 
-        .checkout-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #ddd; text-align: left; color: #333; }
-        .checkout-box h3 { font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        textarea, .card-input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; }
+        .checkout-box { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-top: 12px; border: 1px solid #ddd; }
+        textarea, .card-input { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; }
         
-        #card-fields { display: none; margin-top: 10px; }
+        /* Inline Card layout for Expiry and CVV */
+        .card-row { display: flex; gap: 10px; margin-top: 8px; }
+        .card-row input { flex: 1; }
 
         #login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; width: 320px; text-align: center; color: #333; }
-        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
 
         footer { background: var(--dark-color); color: white; text-align: center; padding: 30px; }
 
-        @media (max-width: 768px) {
-            .search-container { display: none; }
-            #cart-sidebar { width: 100%; right: -100%; }
-        }
+        @media (max-width: 900px) { .ads-sidebar { display: none; } #cart-sidebar { width: 100%; right: -100%; } }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-top">
-            <div class="logo" onclick="window.scrollTo(0,0)">KMart 🛒</div>
+            <div class="logo" onclick="location.reload()">KMart 🛒</div>
             <div class="search-container">
                 <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
             </div>
@@ -123,7 +129,7 @@
         <div class="header-bottom">
             <nav class="nav-links">
                 <a onclick="window.scrollTo(0,0)">Home</a>
-                <a href="#product-section">Products</a>
+                <a href="#all-products-title">Products</a>
             </nav>
             <div class="cart-section" onclick="toggleCart()">
                 <span style="font-size: 1.3rem;">🛒</span>
@@ -136,156 +142,197 @@
     <div id="login-modal">
         <div class="modal-content">
             <h2>Login</h2>
-            <input type="text" placeholder="Email">
-            <input type="password" placeholder="Password">
-            <button class="btn-add" onclick="toggleModal(false)">Sign In</button>
-            <p style="margin-top:15px; font-size:0.85rem; color: #e91e63; cursor:pointer" onclick="toggleModal(false)">Cancel</p>
+            <input type="text" placeholder="Email" class="card-input">
+            <input type="password" placeholder="Password" class="card-input">
+            <button class="btn-add" style="margin-top:15px;" onclick="toggleModal(false)">Sign In</button>
+            <p onclick="toggleModal(false)" style="margin-top:15px; cursor:pointer; color:red; font-size:0.8rem;">Cancel</p>
         </div>
     </div>
 
-    <div class="banner">
-        <h1>Welcome to KMart</h1>
-        <p>Premium Quality | Fast Delivery | Best Prices</p>
-    </div>
+    <div class="main-container">
+        <div class="content-area">
+            <div class="banner">
+                <h1>AI-Powered Shopping</h1>
+                <p>Smart Recommendations Based on Your Interests</p>
+            </div>
 
-    <h2 class="section-title" id="product-section">Featured Products</h2>
-    <div class="product-container" id="products"></div>
+            <div id="personalized-section" style="display: none;">
+                <h2 class="section-title">Recommended for You</h2>
+                <div class="product-grid" id="recommended-products"></div>
+            </div>
+
+            <h2 class="section-title" id="all-products-title">Explore Store</h2>
+            <div class="product-grid" id="products"></div>
+        </div>
+
+        <aside class="ads-sidebar">
+            <h3 style="color:#333; margin-bottom:15px; font-size:1.1rem;">Suggested for You</h3>
+            <div id="ads-container"></div>
+        </aside>
+    </div>
 
     <div id="cart-sidebar">
         <span class="close-cart" onclick="toggleCart()">&times;</span>
-        <h2 style="color: #333;">Your Cart</h2>
-        
-        <div id="cart-items-list" style="margin-top:20px; color: #333;">
+        <h2>Your Cart</h2>
+        <div id="cart-items-list" style="margin-top:20px;">
             <p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty</p>
         </div>
 
         <div id="checkout-section" style="display: none;">
-            <div style="border-top:2px solid #eee; padding-top:15px; margin-top: 15px;">
-                <p style="font-size:1.2rem; font-weight:bold; display:flex; justify-content:space-between; color:#333;">
+            <div style="border-top:2px solid #eee; padding-top:15px; margin-top:15px;">
+                <p style="font-size:1.2rem; font-weight:bold; display:flex; justify-content:space-between;">
                     Total: <span>₹<span id="total-price">0</span></span>
                 </p>
             </div>
-
+            
             <div class="checkout-box">
-                <h3>Delivery Address</h3>
-                <textarea id="address" rows="3" placeholder="Enter Full Address, Landmark, Pincode..."></textarea>
+                <h3 style="font-size:0.9rem;">Delivery Address</h3>
+                <textarea id="address" rows="2" placeholder="Full Address, Landmark, Pincode..."></textarea>
             </div>
 
             <div class="checkout-box">
-                <h3>Payment Method</h3>
-                <label style="display:block; margin:5px 0; cursor:pointer;">
-                    <input type="radio" name="payment" value="COD" checked onclick="toggleCard(false)"> Cash on Delivery
-                </label>
-                <label style="display:block; margin:5px 0; cursor:pointer;">
-                    <input type="radio" name="payment" value="Card" onclick="toggleCard(true)"> Debit/Credit Card
-                </label>
-
-                <div id="card-fields">
+                <h3 style="font-size:0.9rem;">Payment Method</h3>
+                <label><input type="radio" name="pay" value="COD" checked onclick="toggleCard(false)"> Cash</label>
+                <label style="margin-left:15px;"><input type="radio" name="pay" value="Card" onclick="toggleCard(true)"> Card</label>
+                
+                <div id="card-fields" style="display:none; margin-top:10px;">
                     <input type="text" id="card-no" class="card-input" placeholder="16-Digit Card Number" maxlength="16">
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" class="card-input" placeholder="MM/YY" maxlength="5">
-                        <input type="password" class="card-input" placeholder="CVV" maxlength="3">
+                    <div class="card-row">
+                        <input type="text" id="card-expiry" class="card-input" placeholder="MM/YY" maxlength="5">
+                        <input type="password" id="card-cvv" class="card-input" placeholder="CVV" maxlength="3">
                     </div>
                 </div>
             </div>
-
-            <button class="btn-add" style="margin-top:20px; background:var(--success-color); height: 50px;" onclick="placeOrder()">Place Order</button>
+            
+            <button class="btn-add" style="margin-top:15px; background:var(--success-color); height: 45px;" onclick="placeOrder()">Place Order</button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 KMart Shopping Mall - Computer Engineering Final Project</p>
+        <p>&copy; 2026 KMart Smart Retail System - Final Year Project</p>
     </footer>
 
     <script>
-        const products = [
-            { id: 1, name: "Smart Watch", price: 1999, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" },
-            { id: 2, name: "Headphones", price: 1499, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
-            { id: 3, name: "Premium T-Shirt", price: 599, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500" },
-            { id: 4, name: "Laptop Bag", price: 899, img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500" },
-            { id: 5, name: "Sneakers", price: 2499, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
-            { id: 6, name: "Sunglasses", price: 1299, img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" }
+        const allProducts = [
+            { id: 1, name: "Smart Watch", cat: "Electronics", price: 1999, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" },
+            { id: 2, name: "Headphones", cat: "Electronics", price: 1499, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
+            { id: 3, name: "Cotton T-Shirt", cat: "Fashion", price: 599, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" },
+            { id: 4, name: "Gaming Mouse", cat: "Electronics", price: 899, img: "https://images.unsplash.com/photo-1527814732934-7065992985f4?w=400" },
+            { id: 5, name: "Running Shoes", cat: "Fashion", price: 2499, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
+            { id: 6, name: "Leather Wallet", cat: "Fashion", price: 799, img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400" }
         ];
 
-        let cart = JSON.parse(localStorage.getItem('kmart_cart')) || [];
+        let cart = [];
+        let userInterests = JSON.parse(localStorage.getItem('kmart_interests')) || {};
 
-        function displayProducts(filtered = products) {
-            const container = document.getElementById('products');
-            container.innerHTML = filtered.map(p => `
+        function renderUI() {
+            const sorted = [...allProducts].sort((a, b) => (userInterests[b.cat] || 0) - (userInterests[a.cat] || 0));
+            document.getElementById('products').innerHTML = sorted.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3 style="margin: 10px 0; color: #333;">${p.name}</h3>
+                    <img src="${p.img}">
+                    <h4 style="margin-top:10px;">${p.name}</h4>
+                    <p class="price">₹${p.price}</p>
+                    <button class="btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
+                </div>
+            `).join('');
+            updateRecommendations();
+            updateAds();
+        }
+
+        function updateRecommendations() {
+            const topCat = Object.keys(userInterests).reduce((a, b) => userInterests[a] > userInterests[b] ? a : b, null);
+            const section = document.getElementById('personalized-section');
+            if(topCat && userInterests[topCat] > 0) {
+                section.style.display = 'block';
+                const recs = allProducts.filter(p => p.cat === topCat).slice(0, 3);
+                document.getElementById('recommended-products').innerHTML = recs.map(p => `
+                    <div class="product-card" style="border: 2px solid #ffeb3b">
+                        <img src="${p.img}">
+                        <h4>${p.name}</h4>
+                        <button class="btn-add" onclick="addToCart(${p.id})">Quick View</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateAds() {
+            const ads = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 2);
+            document.getElementById('ads-container').innerHTML = ads.map(ad => `
+                <div class="ad-item">
+                    <span class="ad-label">SPONSORED</span>
+                    <img src="${ad.img}">
+                    <p style="font-size:0.8rem; font-weight:600;">Offer on ${ad.name}</p>
+                    <button class="btn-add" style="font-size:0.7rem; padding:5px; margin-top:5px;" onclick="addToCart(${ad.id})">Shop Now</button>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const product = allProducts.find(p => p.id === id);
+            cart.push(product);
+            userInterests[product.cat] = (userInterests[product.cat] || 0) + 1;
+            localStorage.setItem('kmart_interests', JSON.stringify(userInterests));
+            updateCartUI();
+            renderUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const list = document.getElementById('cart-items-list');
+            const checkout = document.getElementById('checkout-section');
+            if(cart.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty</p>';
+                checkout.style.display = "none";
+                return;
+            }
+            checkout.style.display = "block";
+            let total = 0;
+            list.innerHTML = cart.map(item => {
+                total += item.price;
+                return `<div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span>${item.name}</span><b>₹${item.price}</b>
+                </div>`;
+            }).join('');
+            document.getElementById('total-price').innerText = total.toLocaleString();
+        }
+
+        function filterProducts() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q));
+            document.getElementById('products').innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}">
+                    <h4>${p.name}</h4>
                     <p class="price">₹${p.price}</p>
                     <button class="btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
                 </div>
             `).join('');
         }
 
-        function filterProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            displayProducts(products.filter(p => p.name.toLowerCase().includes(query)));
-        }
-
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
-        function toggleModal(show) { document.getElementById('login-modal').style.display = show ? 'flex' : 'none'; }
-        function toggleCard(show) { document.getElementById('card-fields').style.display = show ? 'block' : 'none'; }
-
-        function addToCart(id) {
-            const item = cart.find(i => i.id === id);
-            if (item) item.quantity++; else cart.push({...products.find(p => p.id === id), quantity: 1});
-            save();
-        }
-
-        function removeItem(id) {
-            cart = cart.filter(i => i.id !== id);
-            save();
-        }
-
-        function save() {
-            localStorage.setItem('kmart_cart', JSON.stringify(cart));
-            updateUI();
-        }
-
-        function updateUI() {
-            const list = document.getElementById('cart-items-list');
-            const checkout = document.getElementById('checkout-section');
-            document.getElementById('cart-count').innerText = cart.reduce((s, i) => s + i.quantity, 0);
-            
-            if (cart.length === 0) {
-                list.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px;">Your cart is empty</p>';
-                checkout.style.display = "none";
-                return;
-            }
-
-            checkout.style.display = "block";
-            let total = 0;
-            list.innerHTML = cart.map(item => {
-                total += item.price * item.quantity;
-                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:8px;">
-                    <div><strong style="font-size:0.9rem;">${item.name}</strong><br><small>${item.quantity} x ₹${item.price}</small></div>
-                    <div>₹${item.price * item.quantity} <button onclick="removeItem(${item.id})" style="border:none; color:red; background:none; cursor:pointer; margin-left:8px; font-weight:bold;">✕</button></div>
-                </div>`;
-            }).join('');
-            document.getElementById('total-price').innerText = total.toLocaleString();
-        }
-
+        function toggleModal(s) { document.getElementById('login-modal').style.display = s ? 'flex' : 'none'; }
+        function toggleCard(s) { document.getElementById('card-fields').style.display = s ? 'block' : 'none'; }
+        
         function placeOrder() {
             const addr = document.getElementById('address').value;
-            if(!addr.trim()) return alert("Please enter your delivery address!");
-            
-            const method = document.querySelector('input[name="payment"]:checked').value;
-            if(method === "Card" && document.getElementById('card-no').value.length < 16) {
-                return alert("Please enter a valid 16-digit card number!");
+            if(!addr.trim()) return alert("Please enter delivery address");
+
+            const payMethod = document.querySelector('input[name="pay"]:checked').value;
+            if(payMethod === "Card") {
+                const cardNo = document.getElementById('card-no').value;
+                const expiry = document.getElementById('card-expiry').value;
+                const cvv = document.getElementById('card-cvv').value;
+                if(cardNo.length < 16 || !expiry || cvv.length < 3) {
+                    return alert("Please enter full card details (16-digit card, Expiry, and CVV)");
+                }
             }
 
-            alert("Order Success! Your items will be delivered to:\n" + addr);
-            cart = [];
-            save();
-            toggleCart();
+            alert("Order Placed Successfully! Your items will reach you soon.");
+            cart = []; updateCartUI(); toggleCart();
         }
 
-        displayProducts();
-        updateUI();
+        renderUI();
+        updateCartUI();
     </script>
 </body>
 </html>
