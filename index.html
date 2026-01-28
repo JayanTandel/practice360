@@ -139,7 +139,7 @@
 
     <div class="banner">
         <h1>Welcome to KMart Shopping Mall!</h1>
-        <p>Best quality and lowest price guaranteed.</p>
+        <p>Get huge discounts on your favorite clothes and electronics.</p>
     </div>
 
     <div class="product-container" id="products">
@@ -149,10 +149,10 @@
         <span class="close-cart" onclick="toggleCart()">&times;</span>
         <h2>Your cart</h2>
         <div id="cart-items-list">
-            </div>
+            <p style="color: #999; margin-top: 20px;">Your cart is currently empty.</p>
+        </div>
         <div class="total-section">
-            <span>Total amount:</span>
-            <span>₹<span id="total-price">0</span></span>
+            Total amount: ₹<span id="total-price">0</span>
         </div>
         <button class="btn-add" style="margin-top: 20px; background: #2e7d32;" onclick="checkout()">Confirm order</button>
     </div>
@@ -187,7 +187,7 @@
                     <span class="category-tag">${p.category}</span>
                     <img src="${p.img}" alt="${p.name}">
                     <h3>${p.name}</h3>
-                    <p class="price">₹${p.price.toLocaleString('en-IN')}</p>
+                    <p class="price">₹${p.price}</p>
                     <button class="btn-add" onclick="addToCart(${p.id})">Add to cart</button>
                 </div>
             `).join('');
@@ -266,9 +266,9 @@
 
         function checkout() {
             if(cart.length === 0) {
-                alert("Your cart is empty.!");
+                alert("Please select items first !");
             } else {
-                alert("Congratulations! Your order has been successfully placed.");
+                alert("Your order has been successfully placed! Thank you for shopping at KMart.");
                 cart = [];
                 saveAndUpdate();
                 toggleCart();
